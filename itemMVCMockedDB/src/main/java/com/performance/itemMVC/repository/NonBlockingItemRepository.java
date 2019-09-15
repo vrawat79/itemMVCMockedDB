@@ -16,7 +16,7 @@ import reactor.core.publisher.Flux;
 @Component
 @Profile("nonBlocking")
 public class NonBlockingItemRepository implements ItemRepository {
-	
+
 	@Value("${mockedDBServicehost}")
 	String mockedDbServiceHost;
 
@@ -34,9 +34,13 @@ public class NonBlockingItemRepository implements ItemRepository {
 
 	@Override
 	public List<Item> findByCategory(String category) {
+		List<Item> itemList = null;
+
 		Flux<Item> itemFlux = webClient.get().uri("/").exchange()
 				.flatMapMany(response -> response.bodyToFlux(Item.class));
-		return (List<Item>) itemFlux.toIterable();
+		itemList = itemFlux.collectList().block();
+
+		return itemList;
 	}
 
 //	public List<Item> findByCategory(String category) {
