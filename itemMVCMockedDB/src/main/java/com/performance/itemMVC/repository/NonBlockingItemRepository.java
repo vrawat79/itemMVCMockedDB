@@ -39,6 +39,8 @@ public class NonBlockingItemRepository implements ItemRepository {
 		Flux<Item> itemFlux = webClient.get().uri("/").exchange()
 				.flatMapMany(response -> response.bodyToFlux(Item.class));
 		itemList = itemFlux.collectList().block();
+		
+		//try returning Flux<Item>
 
 		return itemList;
 	}
