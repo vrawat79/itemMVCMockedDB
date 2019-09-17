@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.performance.itemMVC.domain.Item;
 import com.performance.itemMVC.repository.ItemRepository;
 
+import reactor.core.publisher.Flux;
+
 @Service
 public class MVCItemService implements ItemService {
 
@@ -16,7 +18,7 @@ public class MVCItemService implements ItemService {
 	private ItemRepository itemRepo;
 
 //	@Override
-	public List<Item> findByCategory(String category) {
+	public Flux<Item> findByCategory(String category) {
 		// TODO Auto-generated method stub
 		return itemRepo.findByCategory(category);
 	}

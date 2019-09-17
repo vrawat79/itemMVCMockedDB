@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.performance.itemMVC.domain.Item;
 import com.performance.itemMVC.service.ItemService;
 
+import reactor.core.publisher.Flux;
+
 
 
 @RestController
@@ -21,7 +23,7 @@ public class ItemController {
 	private ItemService itemService;
 
 	@GetMapping(path = "/items/{category}")
-	public List<Item> getItemsbyCategory(@PathVariable String category) {
+	public Flux<Item> getItemsbyCategory(@PathVariable String category) {
 
 		return itemService.findByCategory(category);
 	}

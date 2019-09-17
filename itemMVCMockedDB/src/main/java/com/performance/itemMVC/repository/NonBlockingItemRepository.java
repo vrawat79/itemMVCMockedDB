@@ -33,16 +33,18 @@ public class NonBlockingItemRepository implements ItemRepository {
 	}
 
 	@Override
-	public List<Item> findByCategory(String category) {
+	public Flux<Item> findByCategory(String category) {
 		List<Item> itemList = null;
 
 		Flux<Item> itemFlux = webClient.get().uri("/").exchange()
 				.flatMapMany(response -> response.bodyToFlux(Item.class));
-		itemList = itemFlux.collectList().block();
+		
+		
+//		itemList = itemFlux.collectList().block();
 		
 		//try returning Flux<Item>
 
-		return itemList;
+		return itemFlux;
 	}
 
 //	public List<Item> findByCategory(String category) {

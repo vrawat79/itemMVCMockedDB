@@ -15,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.performance.itemMVC.domain.Item;
 
+import reactor.core.publisher.Flux;
+
 @Component
 @Profile("blocking")
 public class BlockingItemRepository implements ItemRepository {
@@ -41,14 +43,16 @@ public class BlockingItemRepository implements ItemRepository {
 		System.out.println("url: " + url);
 	}
 
-	public List<Item> findByCategory(String category) {
+	public Flux<Item> findByCategory(String category) {
 
 		ResponseEntity<List<Item>> response = restTemplate.exchange(url, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Item>>() {
 				});
 		List<Item> itemList = response.getBody();
+		
+		return Flux.fromIterable(itemList);
 
-		return itemList;
+//		return itemList;
 	}
 
 }
