@@ -38,18 +38,18 @@ public class BlockingItemRepository implements ItemRepository {
 	private void postConstruct() {
 //		System.out.println("url: " + url);
 		System.out.println("--- Blocking Client ---");
-		this.url = "http://" + mockedDbServiceHost + ":8080/items/Laptop";
+		this.url = "http://" + mockedDbServiceHost + ":8080/items";
 		this.restTemplate = new RestTemplate();
 		System.out.println("url: " + url);
 	}
 
 	public Flux<Item> findByCategory(String category) {
 
-		ResponseEntity<List<Item>> response = restTemplate.exchange(url, HttpMethod.GET, null,
+		ResponseEntity<List<Item>> response = restTemplate.exchange(url + "/" + category, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Item>>() {
 				});
 		List<Item> itemList = response.getBody();
-		
+
 		return Flux.fromIterable(itemList);
 
 //		return itemList;

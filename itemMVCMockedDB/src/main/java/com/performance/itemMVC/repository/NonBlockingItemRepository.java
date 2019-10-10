@@ -27,23 +27,21 @@ public class NonBlockingItemRepository implements ItemRepository {
 	private void postConstruct() {
 		System.out.println("--- NonBlocking Client ---");
 //		System.out.println("url: " + url);
-		this.url = "http://" + mockedDbServiceHost + ":8080/items/Laptop";
+		this.url = "http://" + mockedDbServiceHost + ":8080/items";
 		this.webClient = WebClient.builder().baseUrl(url).build();
 		System.out.println("url: " + url);
 	}
 
 	@Override
-	public Flux<Item> findByCategory(String category) {
-		List<Item> itemList = null;
+	public Flux<Item> findByCategory(String category) {		
+		Flux<Item> itemFlux = null;
+		if (category.equalsIgnoreCase("catalogue")) {
+			return itemFlux = webClient.get().uri("/stream/" + category).exchange()
+					.flatMapMany(response -> response.bodyToFlux(Item.class));
+		}
 
-		Flux<Item> itemFlux = webClient.get().uri("/").exchange()
+		itemFlux = webClient.get().uri("/" + category).exchange()
 				.flatMapMany(response -> response.bodyToFlux(Item.class));
-		
-		
-//		itemList = itemFlux.collectList().block();
-		
-		//try returning Flux<Item>
-
 		return itemFlux;
 	}
 
